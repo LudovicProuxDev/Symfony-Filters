@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Items</h1>
+    <form method="get" action="{{ path('app_index') }}">
+        <p>
+            <label for="name">Item name:</label>
+            <input type="search" value="{{ app.request.get('name') }}" name="name" id="name" />
+        </p>
+        <p>
+            <label for="quantity">Quantity:</label>
+            <input type="number" pattern="\d*" value="{{ app.request.get('quantity') }}" name="quantity" id="quantity" />
+        </p>
+        <p>
+            <label for="category">Choose a category:</label>
+            <select name="category" id="category">
+                <option value="" {% if '' == app.request.get('category') %} selected {% endif %}></option>
+                {% for category in listCategories %}
+                <option value="{{ category.label }}" {% if category.label == app.request.get('category') %} selected {% endif %}>{{ category.label }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="color">Choose a color:</label>
+            <select name="color" id="color">
+                <option value="" {% if '' == app.request.get('color') %} selected {% endif %}></option>
+                {% for color in listColors %}
+                <option value="{{ color.label }}" {% if color.label == app.request.get('color') %} selected {% endif %}>{{ color.label }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <button>Submit</button>
+        </p>
+    </form>
+
+    {% if listItems %}
+    <table>
+        <thead>    
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Category</th>
+            <th>Color</th>
+        </thead>
+        <tbody>
+        {% for item in listItems %}
+        <tr style="background-color:{{ item.color.code }};">
+            <td>{{ item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.category.label }}</td>
+            <td>{{ item.color.label }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You can't find no item with the selected filters.</p>
+    {% endif %}
+</div>
+{% endblock %}
